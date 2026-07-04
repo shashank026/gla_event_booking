@@ -63,7 +63,7 @@ app.post('/api/generate-url', (req, res) => {
   const token = signBookingToken(whatsappNumber, eventType);
 
   res.json({
-    booking_url: `${BASE_URL}/booking/${token}`
+    booking_url: `https://gla-event-booking.onrender.com/booking/${token}`
   });
 });
 
