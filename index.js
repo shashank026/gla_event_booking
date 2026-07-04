@@ -42,18 +42,29 @@ app.get('/', (req, res) => {
 });
 
 app.post('/api/generate-url', (req, res) => {
-  const { phoneNumber, eventType } = req.body || {};
+  const { whatsappNumber, eventType } = req.body || {};
 
-  if (!phoneNumber || typeof phoneNumber !== 'string' || !/^\d{6,15}$/.test(phoneNumber)) {
-    return res.status(400).json({ error: 'A valid numeric phoneNumber is required.' });
+  if (
+    !whatsappNumber ||
+    typeof whatsappNumber !== 'string' ||
+    !/^\d{10,15}$/.test(whatsappNumber)
+  ) {
+    return res.status(400).json({
+      error: 'A valid WhatsApp number is required.'
+    });
   }
+
   if (!eventType || !VALID_EVENTS.has(eventType)) {
-    return res.status(400).json({ error: 'eventType must be DANDIA_NIGHT or TEDX.' });
+    return res.status(400).json({
+      error: 'eventType must be DANDIA_NIGHT or TEDX.'
+    });
   }
 
-  const token = signBookingToken(phoneNumber, eventType);
-  const booking_url = `${BASE_URL}/booking/${token}`;
-  res.json({ booking_url });
+  const token = signBookingToken(whatsappNumber, eventType);
+
+  res.json({
+    booking_url: `${BASE_URL}/booking/${token}`
+  });
 });
 
 app.get('/booking/:token', (req, res) => {
