@@ -1,0 +1,154 @@
+<%- include('layout', { title: 'Dandia Night | Booking' , bodyClass: 'page-dandia' , extraCss: '/css/dandia.css' , body:
+  ` <section class="booking-section">
+  <div class="container">
+    <div class="ticket-card">
+      <h2>Reserve your ticket | Dandia Night</h2>
+      <p class="muted">Booking link expires in <span id="countdown" data-expires="${expiresAt}">--:--</span></p>
+      <form class="booking-form" onsubmit="return false;">
+        <label>
+          <span>Full name</span>
+          <input type="text" name="name" placeholder="Your name" required />
+        </label>
+        <label>
+          <span>Phone number</span>
+          <input type="tel" name="phoneNumber" value="${phoneNumber}" readonly />
+        </label>
+
+        <div class="verify-fields">
+          <p class="verify-heading">Student verification</p>
+          <label>
+            <span>Student ID / Roll number</span>
+            <input type="text" name="rollNumber" placeholder="e.g. 2201100123" required />
+          </label>
+          <label>
+            <span>College email ID</span>
+            <input type="email" name="collegeEmail" placeholder="yourname@gla.ac.in" pattern=".+@gla\\.ac\\.in$"
+              required />
+          </label>
+          <p class="field-hint">Use your official @gla.ac.in email. You'll need your student ID card at entry.</p>
+        </div>
+
+        <label>
+          <span>Ticket type</span>
+          <select name="tier">
+            <option value="early" data-price="499">Early Bird &mdash; &#8377;499</option>
+            <option value="regular" data-price="799">Regular &mdash; &#8377;799</option>
+            <option value="vip" data-price="1499">VIP (front row) &mdash; &#8377;1499</option>
+          </select>
+        </label>
+        <label>
+          <span>Number of tickets</span>
+          <input type="number" name="qty" min="1" max="10" value="1" />
+        </label>
+
+        <div class="inline-total">
+          <span>Total</span>
+          <strong id="inlineTotal">&#8377;499</strong>
+        </div>
+
+        <button type="button" class="btn whatsapp-btn">
+          Pay via UPI
+        </button>
+        <p class="wa-note">We'll confirm your seats and take payment over WhatsApp, just like booking a metro ticket.
+        </p>
+      </form>
+    </div>
+  </div>
+  </section>
+
+  <div class="sticky-book-bar">
+    <div class="total-block">
+      <span class="total-label">Total</span>
+      <span class="total-amount" id="stickyTotal">&#8377;499</span>
+    </div>
+    <button type="button" class="whatsapp-btn">
+      Pay via UPI
+    </button>
+  </div>
+
+  <script>
+    (function () {
+      var NL = String.fromCharCode(10);
+      var priceLabels = { early: 'Early Bird', regular: 'Regular', vip: 'VIP (front row)' };
+      var form = document.querySelector('.booking-form');
+      var tierSelect = form.querySelector('select[name="tier"]');
+      var qtyInput = form.querySelector('input[name="qty"]');
+      var stickyTotal = document.getElementById('stickyTotal');
+      var inlineTotal = document.getElementById('inlineTotal');
+
+      function currentTotal() {
+        var opt = tierSelect.options[tierSelect.selectedIndex];
+        var price = parseInt(opt.getAttribute('data-price'), 10) || 0;
+        var qty = parseInt(qtyInput.value, 10) || 1;
+        return price * qty;
+      }
+
+      function updateTotal() {
+        var total = '\u20b9' + currentTotal();
+        stickyTotal.textContent = total;
+        inlineTotal.textContent = total;
+      }
+
+      tierSelect.addEventListener('change', updateTotal);
+      qtyInput.addEventListener('input', updateTotal);
+      updateTotal();
+
+      var waButtons = document.querySelectorAll('.whatsapp-btn');
+      for (var i = 0; i < waButtons.length; i++) {
+        waButtons[i].addEventListener('click', async function () {
+          var name = form.querySelector('input[name="name"]').value.trim();
+          var roll = form.querySelector('input[name="rollNumber"]').value.trim();
+          var email = form.querySelector('input[name="collegeEmail"]').value.trim();
+          var phone = form.querySelector('input[name="phoneNumber"]').value.trim();
+
+          if (!name || !roll || !email) {
+            alert('Please fill your name, roll number and college email before payment.');
+            return;
+          }
+
+          if (!/.+@gla\.ac\.in$/.test(email)) {
+            alert('Please use your official @gla.ac.in email.');
+            return;
+          }
+
+          var tierKey = tierSelect.value;
+          var qty = qtyInput.value;
+          var total = currentTotal();
+
+          try {
+            var response = await fetch('/pay-for-event', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                destination: phone,
+                event: 'Dandia Night 2026',
+                name: name,
+                rollNumber: roll,
+                collegeEmail: email,
+                ticketType: priceLabels[tierKey],
+                quantity: qty,
+                amount: total
+              })
+            });
+
+            var data = await response.json();
+
+            if (!response.ok) {
+              alert(data.message || 'Payment request failed.');
+              return;
+            }
+
+            alert('Payment request sent successfully on WhatsApp.');
+          } catch (error) {
+            console.error(error);
+            alert('Something went wrong while sending payment request.');
+          }
+        });
+      }
+    })();
+  </script>
+  `
+  }) %>
+  <script src="/js/countdown.js"></script>

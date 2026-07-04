@@ -1,0 +1,14 @@
+<%- include('layout', {
+  title: 'Invalid link',
+  bodyClass: 'page-error',
+  body: `
+  <section class="status-section">
+    <div class="container status-card">
+      <div class="status-icon">&#9888;</div>
+      <h1>Invalid booking link</h1>
+      <p>${message}</p>
+      <a href="/" class="btn btn-primary">Back to home</a>
+    </div>
+  </section>
+  `
+}) %>

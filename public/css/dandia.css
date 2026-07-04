@@ -1,0 +1,122 @@
+.page-dandia .event-hero {
+  background: linear-gradient(135deg, #b91c1c 0%, #ea580c 50%, #f59e0b 100%);
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 140px;
+}
+.page-dandia .event-hero::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.12) 0, transparent 40%),
+                    radial-gradient(circle at 80% 70%, rgba(255,255,255,0.08) 0, transparent 40%);
+  pointer-events: none;
+}
+.page-dandia .hero-illustration {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 220px;
+  z-index: 0;
+}
+.page-dandia .hero-illustration svg { width: 100%; height: 100%; display: block; }
+.page-dandia .event-hero-inner { position: relative; z-index: 1; }
+
+.page-dandia .hosted-by-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 999px;
+  padding: 5px 14px 5px 6px;
+  margin-bottom: 18px;
+}
+.page-dandia .hosted-by-chip img { height: 20px; width: auto; border-radius: 999px; }
+.page-dandia .hosted-by-chip span {
+  font-family: "Inter", sans-serif;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #7c2d12;
+  letter-spacing: 0.02em;
+}
+
+/* Highlight chip strip — a horizontally scannable row, not a bullet list */
+.page-dandia .chip-strip {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 18px 16px 22px;
+  -webkit-overflow-scrolling: touch;
+}
+.page-dandia .chip-strip::-webkit-scrollbar { display: none; }
+.page-dandia .chip {
+  flex-shrink: 0;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  color: #9a3412;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-family: "Inter", sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.page-dandia .ticket-card {
+  border-radius: 22px;
+  border: 1px solid #fed7aa;
+}
+
+.page-dandia .verify-fields {
+  border: 1px dashed #ea580c;
+  background: #fff7ed;
+  border-radius: 12px;
+  padding: 14px 16px 4px;
+  margin: 4px 0 6px;
+}
+.page-dandia .verify-heading {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #c2410c;
+  margin: 0 0 10px;
+}
+.page-dandia .field-hint {
+  font-size: 0.78rem;
+  color: #9a3412;
+  margin: 6px 0 10px;
+}
+
+.page-dandia .inline-total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  background: #fff7ed;
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin: 6px 0 14px;
+}
+.page-dandia .inline-total span {
+  font-family: "Inter", sans-serif;
+  font-size: 0.8rem;
+  color: #9a3412;
+}
+.page-dandia .inline-total strong {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.25rem;
+  color: #7c2d12;
+}
+
+.page-dandia .wa-note {
+  font-size: 0.78rem;
+  color: var(--gla-muted, #6b7280);
+  text-align: center;
+  margin-top: 10px;
+}
+
+.page-dandia .sticky-book-bar .total-amount { color: #c2410c; }
+
+@media (max-width: 640px) {
+  .page-dandia .event-hero { padding-bottom: 120px; }
+  .page-dandia .hero-illustration { height: 170px; }
+}

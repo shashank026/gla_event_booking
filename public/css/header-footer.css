@@ -1,0 +1,271 @@
+/* GLA University brand layer — shared across all event pages.
+   Scoped to its own custom properties so it never collides with
+   whatever tokens already live in styles.css. */
+:root {
+  --gla-green: #1b5e3b;
+  --gla-green-dark: #0f3d26;
+  --gla-gold: #c9a227;
+  --gla-cream: #fbf8f0;
+  --gla-ink: #16181b;
+  --gla-muted: #6b7280;
+}
+
+/* ---------- Header ---------- */
+.site-header {
+  background: var(--gla-cream);
+  border-bottom: 1px solid rgba(27, 94, 59, 0.18);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 14px 0;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--gla-ink);
+}
+
+.brand-logo {
+  height: 44px;
+  width: auto;
+  display: block;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+  font-family: "Playfair Display", Georgia, serif;
+}
+
+.brand-text strong {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--gla-green-dark);
+  letter-spacing: 0.01em;
+}
+
+.brand-text small {
+  font-family: "Inter", sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gla-muted);
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.site-nav a {
+  font-family: "Inter", sans-serif;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--gla-ink);
+  text-decoration: none;
+  opacity: 0.85;
+  transition: opacity 0.15s ease, color 0.15s ease;
+}
+
+.site-nav a:hover {
+  opacity: 1;
+  color: var(--gla-green);
+}
+
+/* ---------- Host ribbon ----------
+   A thin, quiet strip of institutional trust that sits between the
+   header and each event's own hero, so it never fights that event's
+   color story underneath it. */
+.host-ribbon {
+  background: var(--gla-green-dark);
+  border-top: 2px solid var(--gla-gold);
+  border-bottom: 2px solid var(--gla-gold);
+}
+
+.host-ribbon-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 6px 0;
+}
+
+.host-ribbon-mark {
+  height: 16px;
+  width: auto;
+  border-radius: 2px;
+}
+
+.host-ribbon span {
+  font-family: "Inter", sans-serif;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gla-cream);
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  background: var(--gla-green-dark);
+  color: rgba(251, 248, 240, 0.85);
+  margin-top: 64px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 32px;
+  padding: 40px 0 24px;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-logo {
+  height: 40px;
+  width: auto;
+  background: var(--gla-cream);
+  padding: 4px 8px;
+  border-radius: 4px;
+  align-self: flex-start;
+}
+
+.footer-brand p {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin: 0;
+  color: rgba(251, 248, 240, 0.7);
+}
+
+.footer-legal {
+  color: rgba(251, 248, 240, 0.5) !important;
+  font-size: 0.78rem !important;
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.footer-heading {
+  font-family: "Inter", sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gla-gold);
+  margin-bottom: 4px;
+}
+
+.footer-links a {
+  color: rgba(251, 248, 240, 0.75);
+  text-decoration: none;
+  font-size: 0.88rem;
+}
+
+.footer-links a:hover {
+  color: var(--gla-cream);
+}
+
+.footer-bottom {
+  border-top: 1px solid rgba(251, 248, 240, 0.12);
+  padding: 16px 0;
+}
+
+.footer-bottom p {
+  margin: 0;
+  font-size: 0.78rem;
+  color: rgba(251, 248, 240, 0.55);
+}
+
+@media (max-width: 720px) {
+  .header-inner { flex-wrap: wrap; }
+  .site-nav { display: none; }
+  .brand-text small { display: none; }
+  .footer-grid { grid-template-columns: 1fr; }
+  body { padding-bottom: 78px; }
+}
+
+/* ---------- Sticky WhatsApp booking bar ----------
+   The one element every event page shares, deliberately: a fixed
+   bottom bar with a live total and a single WhatsApp hand-off action,
+   the same pattern DMRC and most ticketing bots use once you're on a
+   phone. Colour of the total is set per-event; the WhatsApp button
+   itself never changes, since consistency there is the point. */
+.sticky-book-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  background: var(--gla-cream);
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 10px 16px;
+  padding-bottom: max(10px, env(safe-area-inset-bottom));
+}
+
+.sticky-book-bar .total-block {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.sticky-book-bar .total-label {
+  font-family: "Inter", sans-serif;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--gla-muted);
+}
+
+.sticky-book-bar .total-amount {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.whatsapp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #25d366;
+  color: #ffffff;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 20px;
+  font-family: "Inter", sans-serif;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.whatsapp-btn:hover { background: #1fb855; }
+.whatsapp-btn:active { transform: scale(0.97); }
+
+.whatsapp-btn svg { height: 18px; width: 18px; flex-shrink: 0; }
+
+@media (min-width: 721px) {
+  .sticky-book-bar { display: none; }
+}

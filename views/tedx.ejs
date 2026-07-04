@@ -1,0 +1,199 @@
+<%- include('layout', { title: 'TEDx Evening | Booking' , bodyClass: 'page-tedx' , extraCss: '/css/tedx.css' , body: `
+  <section class="event-hero">
+  <div class="hero-illustration">
+    <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax slice" role="img"
+      aria-label="Speaker podium under a spotlight">
+      <circle cx="320" cy="60" r="70" fill="none" stroke="rgba(220,38,38,0.18)" stroke-width="18" />
+      <circle cx="320" cy="60" r="40" fill="none" stroke="rgba(220,38,38,0.28)" stroke-width="10" />
+      <circle cx="320" cy="60" r="14" fill="#dc2626" />
+      <polygon points="320,60 250,220 390,220" fill="rgba(220,38,38,0.10)" />
+      <polygon points="170,220 230,220 220,150 180,150" fill="#1e293b" stroke="#334155" stroke-width="1" />
+      <rect x="192" y="130" width="16" height="24" rx="2" fill="#334155" />
+      <line x1="200" y1="130" x2="200" y2="100" stroke="#94a3b8" stroke-width="2" />
+      <ellipse cx="200" cy="94" rx="7" ry="9" fill="#94a3b8" />
+      <g fill="#1e293b">
+        <circle cx="30" cy="205" r="9" />
+        <circle cx="55" cy="210" r="9" />
+        <circle cx="80" cy="203" r="9" />
+        <circle cx="105" cy="212" r="9" />
+        <circle cx="130" cy="206" r="9" />
+      </g>
+    </svg>
+  </div>
+  <div class="container event-hero-inner">
+    <div class="hosted-by-chip">
+      <img src="/images/gla-university-logo.jpg" alt="" />
+      <span>GLA University presents</span>
+    </div>
+    <p class="eyebrow">Ideas worth spreading</p>
+    <h1>TEDx Evening 2026</h1>
+    <p class="lead">A curated evening of short, powerful talks from local thinkers and doers. Stay for the networking
+      reception afterward.</p>
+    <ul class="event-facts">
+      <li><span>Date</span> November 12, 2026</li>
+      <li><span>Time</span> 5:00 PM onwards</li>
+      <li><span>Venue</span> Auditorium Hall, GLA University Campus</li>
+    </ul>
+  </div>
+  </section>
+
+  <div class="programme-strip container">
+    <div class="programme-item"><span class="time">5:00</span><span class="label">Doors open</span></div>
+    <div class="programme-item"><span class="time">5:30</span><span class="label">Talks begin</span></div>
+    <div class="programme-item"><span class="time">7:00</span><span class="label">Speaker Q&amp;A</span></div>
+    <div class="programme-item"><span class="time">7:30</span><span class="label">Reception</span></div>
+  </div>
+
+  <section class="booking-section">
+    <div class="container">
+      <div class="ticket-card">
+        <h2>Reserve your seat</h2>
+        <p class="muted">Booking link expires in <span id="countdown" data-expires="${expiresAt}">--:--</span></p>
+        <form class="booking-form" onsubmit="return false;">
+          <label>
+            <span>Full name</span>
+            <input type="text" name="name" placeholder="Your name" required />
+          </label>
+          <label>
+            <span>Phone number</span>
+            <input type="tel" name="phoneNumber" value="${phoneNumber}" readonly />
+          </label>
+
+          <div class="verify-fields">
+            <p class="verify-heading">Student verification</p>
+            <label>
+              <span>Student ID / Roll number</span>
+              <input type="text" name="rollNumber" placeholder="e.g. 2201100123" required />
+            </label>
+            <label>
+              <span>College email ID</span>
+              <input type="email" name="collegeEmail" placeholder="yourname@gla.ac.in" pattern=".+@gla\\.ac\\.in$"
+                required />
+            </label>
+            <p class="field-hint">Use your official @gla.ac.in email. You'll need your student ID card at entry.</p>
+          </div>
+
+          <label>
+            <span>Pass type</span>
+            <select name="tier">
+              <option value="standard" data-price="999">Standard &mdash; &#8377;999</option>
+              <option value="student" data-price="499">Student &mdash; &#8377;499</option>
+              <option value="patron" data-price="2499">Patron (reserved) &mdash; &#8377;2499</option>
+            </select>
+          </label>
+          <label>
+            <span>Number of seats</span>
+            <input type="number" name="qty" min="1" max="6" value="1" />
+          </label>
+
+          <div class="inline-total">
+            <span>Total</span>
+            <strong id="inlineTotal">&#8377;999</strong>
+          </div>
+
+          <button type="button" class="btn whatsapp-btn">
+            Pay via UPI
+          </button>
+          <p class="wa-note">We'll confirm your seat and take payment over WhatsApp, just like booking a metro ticket.
+          </p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <div class="sticky-book-bar">
+    <div class="total-block">
+      <span class="total-label">Total</span>
+      <span class="total-amount" id="stickyTotal">&#8377;999</span>
+    </div>
+    <button type="button" class="whatsapp-btn">
+      Pay via UPI
+    </button>
+  </div>
+
+  <script>
+    (function () {
+      var NL = String.fromCharCode(10);
+      var priceLabels = { standard: 'Standard', student: 'Student', patron: 'Patron (reserved)' };
+      var form = document.querySelector('.booking-form');
+      var tierSelect = form.querySelector('select[name="tier"]');
+      var qtyInput = form.querySelector('input[name="qty"]');
+      var stickyTotal = document.getElementById('stickyTotal');
+      var inlineTotal = document.getElementById('inlineTotal');
+
+      function currentTotal() {
+        var opt = tierSelect.options[tierSelect.selectedIndex];
+        var price = parseInt(opt.getAttribute('data-price'), 10) || 0;
+        var qty = parseInt(qtyInput.value, 10) || 1;
+        return price * qty;
+      }
+
+      function updateTotal() {
+        var total = '\u20b9' + currentTotal();
+        stickyTotal.textContent = total;
+        inlineTotal.textContent = total;
+      }
+
+      tierSelect.addEventListener('change', updateTotal);
+      qtyInput.addEventListener('input', updateTotal);
+      updateTotal();
+
+      var waButtons = document.querySelectorAll('.whatsapp-btn');
+      for (var i = 0; i < waButtons.length; i++) {
+        waButtons[i].addEventListener('click', async function () {
+          var name = form.querySelector('input[name="name"]').value.trim();
+          var roll = form.querySelector('input[name="rollNumber"]').value.trim();
+          var email = form.querySelector('input[name="collegeEmail"]').value.trim();
+          var phone = form.querySelector('input[name="phoneNumber"]').value.trim();
+
+          if (!name || !roll || !email) {
+            alert('Please fill your name, roll number and college email before payment.');
+            return;
+          }
+
+          if (!/.+@gla\.ac\.in$/.test(email)) {
+            alert('Please use your official @gla.ac.in email.');
+            return;
+          }
+
+          var tierKey = tierSelect.value;
+          var qty = qtyInput.value;
+          var total = currentTotal();
+
+          try {
+            var response = await fetch('/pay-for-event', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                destination: phone,
+                event: 'TEDX 2026',
+                name: name,
+                rollNumber: roll,
+                collegeEmail: email,
+                ticketType: priceLabels[tierKey],
+                quantity: qty,
+                amount: total
+              })
+            });
+
+            var data = await response.json();
+
+            if (!response.ok) {
+              alert(data.message || 'Payment request failed.');
+              return;
+            }
+
+            alert('Payment request sent successfully on WhatsApp.');
+          } catch (error) {
+            console.error(error);
+            alert('Something went wrong while sending payment request.');
+          }
+        });
+      }
+    })();
+  </script>
+  `
+  }) %>
+  <script src="/js/countdown.js"></script>

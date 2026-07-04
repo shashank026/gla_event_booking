@@ -1,0 +1,62 @@
+<%- include('layout', { title: 'Event Booking | Home', body: `
+<section class="hero">
+  <div class="container hero-inner">
+    <p class="eyebrow">Secure ticketing</p>
+    <h1>Book your spot at the city's most awaited events.</h1>
+    <p class="lead">Generate a secure, time-limited booking link with a single API call. Each link is signed, expires in 10 minutes, and opens the right event page automatically.</p>
+    <div class="hero-actions">
+      <a href="#events" class="btn btn-primary">Explore events</a>
+      <a href="#api" class="btn btn-ghost">View API</a>
+    </div>
+  </div>
+</section>
+
+<section id="events" class="events">
+  <div class="container">
+    <h2 class="section-title">Upcoming events</h2>
+    <div class="event-grid">
+      <article class="event-card dandia">
+        <div class="event-tag">Cultural</div>
+        <h3>Dandia Night</h3>
+        <p>A vibrant evening of Garba and Dandia Raas. Live music, festive decor, and a night of rhythm under the stars.</p>
+        <ul class="event-meta">
+          <li>Oct 19, 2026 &middot; 6:30 PM</li>
+          <li>Community Grounds</li>
+        </ul>
+      </article>
+      <article class="event-card tedx">
+        <div class="event-tag">Ideas</div>
+        <h3>TEDx Evening</h3>
+        <p>Thought-provoking talks from local visionaries. An curated session of ideas worth spreading, followed by networking.</p>
+        <ul class="event-meta">
+          <li>Nov 12, 2026 &middot; 5:00 PM</li>
+          <li>Auditorium Hall</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="api" class="api-section">
+  <div class="container">
+    <h2 class="section-title">Generate a booking link</h2>
+    <p class="section-lead">Send a POST request with a phone number and event type. The response returns a signed URL that opens the matching event page for 10 minutes.</p>
+    <div class="code-block">
+      <div class="code-label">Request</div>
+      <pre>POST /api/generate-url
+Content-Type: application/json
+
+{
+  "phoneNumber": "9190909090",
+  "eventType": "DANDIA_NIGHT"
+}</pre>
+    </div>
+    <div class="code-block">
+      <div class="code-label">Response</div>
+      <pre>{
+  "booking_url": "${baseUrl}/booking/&lt;signed-jwt&gt;"
+}</pre>
+    </div>
+  </div>
+</section>
+` }) %>

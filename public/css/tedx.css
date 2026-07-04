@@ -1,0 +1,130 @@
+.page-tedx .event-hero {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #dc2626 100%);
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 140px;
+}
+.page-tedx .event-hero::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle at 85% 20%, rgba(220, 38, 38, 0.25) 0, transparent 45%);
+  pointer-events: none;
+}
+.page-tedx .hero-illustration {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 220px;
+  z-index: 0;
+}
+.page-tedx .hero-illustration svg { width: 100%; height: 100%; display: block; }
+.page-tedx .event-hero-inner { position: relative; z-index: 1; }
+
+.page-tedx .hosted-by-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 4px;
+  padding: 5px 14px 5px 6px;
+  margin-bottom: 18px;
+}
+.page-tedx .hosted-by-chip img { height: 20px; width: auto; border-radius: 2px; }
+.page-tedx .hosted-by-chip span {
+  font-family: "Inter", sans-serif;
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #0f172a;
+  letter-spacing: 0.02em;
+}
+
+/* Programme timeline strip — sequence carries real information here,
+   unlike Dandia's chip row, so a numbered/timed layout earns its place */
+.page-tedx .programme-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  padding: 20px 16px 24px;
+  border-bottom: 1px solid #e2e8f0;
+}
+.page-tedx .programme-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: 12px;
+  border-left: 2px solid #dc2626;
+}
+.page-tedx .programme-item .time {
+  font-family: "Playfair Display", Georgia, serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #0f172a;
+}
+.page-tedx .programme-item .label {
+  font-family: "Inter", sans-serif;
+  font-size: 0.72rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.page-tedx .ticket-card {
+  border-radius: 4px;
+  border: 1px solid #1e293b;
+}
+
+.page-tedx .verify-fields {
+  border: 1px dashed #dc2626;
+  background: #fef2f2;
+  border-radius: 4px;
+  padding: 14px 16px 4px;
+  margin: 4px 0 6px;
+}
+.page-tedx .verify-heading {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #b91c1c;
+  margin: 0 0 10px;
+}
+.page-tedx .field-hint {
+  font-size: 0.78rem;
+  color: #7f1d1d;
+  margin: 6px 0 10px;
+}
+
+.page-tedx .inline-total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  background: #0f172a;
+  border-radius: 4px;
+  padding: 10px 14px;
+  margin: 6px 0 14px;
+}
+.page-tedx .inline-total span {
+  font-family: "Inter", sans-serif;
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
+.page-tedx .inline-total strong {
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: 1.25rem;
+  color: #fca5a5;
+}
+
+.page-tedx .wa-note {
+  font-size: 0.78rem;
+  color: var(--gla-muted, #6b7280);
+  text-align: center;
+  margin-top: 10px;
+}
+
+.page-tedx .sticky-book-bar .total-amount { color: #b91c1c; }
+
+@media (max-width: 640px) {
+  .page-tedx .event-hero { padding-bottom: 120px; }
+  .page-tedx .hero-illustration { height: 170px; }
+  .page-tedx .programme-strip { grid-template-columns: repeat(2, 1fr); row-gap: 14px; }
+}

@@ -1,0 +1,15 @@
+<%- include('layout', {
+  title: 'Link expired',
+  bodyClass: 'page-expired',
+  body: `
+  <section class="status-section">
+    <div class="container status-card">
+      <div class="status-icon">&#9203;</div>
+      <h1>Booking link expired</h1>
+      <p>This booking link is no longer valid. Links expire 10 minutes after they are generated for your security.</p>
+      <p class="muted">Please request a new booking link and complete your reservation within 10 minutes.</p>
+      <a href="/" class="btn btn-primary">Back to home</a>
+    </div>
+  </section>
+  `
+}) %>
