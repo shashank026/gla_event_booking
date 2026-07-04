@@ -44,26 +44,24 @@ app.get('/', (req, res) => {
 app.post('/api/generate-url', (req, res) => {
   const { whatsappNumber, eventType } = req.body || {};
 
-  if (
-    !whatsappNumber ||
-    typeof whatsappNumber !== 'string' ||
-    !/^\d{10,15}$/.test(whatsappNumber)
-  ) {
+  const phone = String(whatsappNumber ?? '').trim();
+
+  if (!/^\d{10,15}$/.test(phone)) {
     return res.status(400).json({
-      error: 'A valid WhatsApp number is required.'
+      error: 'A valid WhatsApp number is required.',
     });
   }
 
   if (!eventType || !VALID_EVENTS.has(eventType)) {
     return res.status(400).json({
-      error: 'eventType must be DANDIA_NIGHT or TEDX.'
+      error: 'eventType must be DANDIA_NIGHT or TEDX.',
     });
   }
 
-  const token = signBookingToken(whatsappNumber, eventType);
+  const token = signBookingToken(phone, eventType);
 
   res.json({
-    booking_url: `https://gla-event-booking.onrender.com/booking/${token}`
+    booking_url: `https://gla-event-booking.onrender.com/booking/${token}`,
   });
 });
 
