@@ -108,7 +108,7 @@ app.post('/pay-for-event', async (req, res) => {
             "quantity": "1",
             "amount": "1"
           },
-          campaignId: '6a493cfc93241813f6b0d343',
+          campaignId: "6a493cfc93241813f6b0d343",
           campaignName: "GLA DEMO PAYMENT"
         }),
       }
