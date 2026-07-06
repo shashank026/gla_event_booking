@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updateTotal() {
         var total = '₹' + currentTotal();
+
         stickyTotal.textContent = total;
         inlineTotal.textContent = total;
     }
@@ -73,10 +74,18 @@ document.addEventListener('DOMContentLoaded', function () {
             var qty = parseInt(qtyInput.value, 10) || 1;
             var total = currentTotal();
 
-            waButtons.forEach(function (btn) {
-                btn.disabled = true;
-                btn.textContent = 'Processing...';
-            });
+            var confirmMessage =
+                'Confirm your booking:\n\n' +
+                'Event: TEDx Evening 2026\n' +
+                'Name: ' + name + '\n' +
+                'Pass Type: ' + priceLabels[tierKey] + '\n' +
+                'Quantity: ' + qty + '\n' +
+                'Total Amount: ₹' + total + '\n\n' +
+                'Proceed with payment via WhatsApp?';
+
+            if (!confirm(confirmMessage)) {
+                return;
+            }
 
             try {
                 var response = await fetch('/pay-for-event', {
@@ -100,30 +109,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (!response.ok) {
                     alert(data.message || 'Payment request failed.');
-
-                    waButtons.forEach(function (btn) {
-                        btn.disabled = false;
-                        btn.textContent = 'Pay via UPI';
-                    });
-
                     return;
                 }
 
-                alert('Payment request sent successfully on WhatsApp.');
-
                 window.close();
 
-                setTimeout(function () {
-                    window.location.href = 'about:blank';
-                }, 500);
+                alert('Payment request sent successfully on WhatsApp.');
             } catch (error) {
                 console.error('Payment request error:', error);
                 alert('Something went wrong while sending payment request.');
-
-                waButtons.forEach(function (btn) {
-                    btn.disabled = false;
-                    btn.textContent = 'Pay via UPI';
-                });
             }
         });
     });
