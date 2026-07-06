@@ -160,6 +160,19 @@
           var qty = qtyInput.value;
           var total = currentTotal();
 
+          // Show confirmation alert
+          var confirmMessage = 'Confirm your booking:\n\n' +
+            'Event: TEDx Evening 2026\n' +
+            'Name: ' + name + '\n' +
+            'Pass Type: ' + priceLabels[tierKey] + '\n' +
+            'Quantity: ' + qty + '\n' +
+            'Total Amount: ₹' + total + '\n\n' +
+            'Proceed with payment via WhatsApp?';
+
+          if (!confirm(confirmMessage)) {
+            return;
+          }
+
           try {
             var response = await fetch('/pay-for-event', {
               method: 'POST',
