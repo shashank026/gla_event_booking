@@ -88,7 +88,38 @@ app.get('/booking/:token', (req, res) => {
 
 app.post('/pay-for-event', async (req, res) => {
   try {
-    const { destination, event } = req.body;
+    const { destination, event } = req.body || {};
+
+    if (!destination) {
+      return res.status(400).json({
+        success: false,
+        message: 'destination is required',
+      });
+    }
+
+    if (!event) {
+      return res.status(400).json({
+        success: false,
+        message: 'event is required',
+      });
+    }
+
+    const payload = {
+      destination: String(destination),
+      attributes: {
+        imageUrl:
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFKpOVnbiAY9YJ6Z6LWBerqnaQR3sUrqRj06tHb954AQ&s=10',
+        orderId: `ORD-${Date.now()}`,
+        productName: String(event),
+        retailerId: 'SKU-PLAN-01',
+        quantity: 1,
+        amount: 1,
+      },
+      campaignId: '6a493cfc93241813f6b0d343',
+      campaignName: 'GLA DEMO PAYMENT',
+    };
+
+    console.log('BigBrosAI campaign payload:', JSON.stringify(payload, null, 2));
 
     const response = await fetch(
       'https://backend.bigbrosai.com/api/v1/campaign/api-campaign',
@@ -96,32 +127,49 @@ app.post('/pay-for-event', async (req, res) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'bigbrosai-api-key': `live_8439331da5e14f878a5b26378fb58411`,
+          'bigbrosai-api-key': 'live_8439331da5e14f878a5b26378fb58411',
         },
-        body: JSON.stringify({
-          destination,
-          "attributes": {
-            "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFKpOVnbiAY9YJ6Z6LWBerqnaQR3sUrqRj06tHb954AQ&s=10",
-            "orderId": "ORD-1001",
-            "productName": event,
-            "retailerId": "SKU-PLAN-01",
-            "quantity": "1",
-            "amount": "1"
-          },
-          campaignId: "6a493cfc93241813f6b0d343",
-          campaignName: "GLA DEMO PAYMENT"
-        }),
+        body: JSON.stringify(payload),
       }
     );
 
-    const data = await response.json();
+    const rawResponse = await response.text();
 
-    return res.status(response.status).json(data);
+    let data;
+    try {
+      data = rawResponse ? JSON.parse(rawResponse) : {};
+    } catch {
+      data = {
+        rawResponse,
+      };
+    }
+
+    console.log('BigBrosAI campaign response:', {
+      status: response.status,
+      ok: response.ok,
+      data,
+    });
+
+    if (!response.ok) {
+      return res.status(response.status).json({
+        success: false,
+        message: 'Failed to trigger payment request',
+        bigbrosaiStatus: response.status,
+        data,
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: 'Payment request sent successfully on WhatsApp.',
+      data,
+    });
   } catch (error) {
-    console.error(error);
+    console.error('Pay for event error:', error);
+
     return res.status(500).json({
       success: false,
-      message: 'Failed to trigger campaign',
+      message: 'Internal server error while triggering payment request',
       error: error.message,
     });
   }
