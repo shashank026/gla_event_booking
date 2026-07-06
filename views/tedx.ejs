@@ -113,6 +113,7 @@
 
   <script>
     (function () {
+      console.log('Script loaded and executing...');
       var NL = String.fromCharCode(10);
       var priceLabels = { standard: 'Standard', student: 'Student', patron: 'Patron (reserved)' };
       var form = document.querySelector('.booking-form');
@@ -120,6 +121,8 @@
       var qtyInput = form.querySelector('input[name="qty"]');
       var stickyTotal = document.getElementById('stickyTotal');
       var inlineTotal = document.getElementById('inlineTotal');
+      
+      console.log('Form elements found:', { form, tierSelect, qtyInput, stickyTotal, inlineTotal });
 
       function currentTotal() {
         var opt = tierSelect.options[tierSelect.selectedIndex];
@@ -139,26 +142,38 @@
       updateTotal();
 
       var waButtons = document.querySelectorAll('.whatsapp-btn');
+      console.log('Found ' + waButtons.length + ' WhatsApp buttons');
+      
       for (var i = 0; i < waButtons.length; i++) {
+        console.log('Adding click listener to button ' + (i + 1));
         waButtons[i].addEventListener('click', async function () {
+          console.log('Pay via UPI button clicked');
           var name = form.querySelector('input[name="name"]').value.trim();
           var roll = form.querySelector('input[name="rollNumber"]').value.trim();
           var email = form.querySelector('input[name="collegeEmail"]').value.trim();
           var phone = form.querySelector('input[name="phoneNumber"]').value.trim();
+          
+          console.log('Form data:', { name, roll, email, phone });
 
           if (!name || !roll || !email) {
+            console.log('Validation failed: missing required fields');
             alert('Please fill your name, roll number and college email before payment.');
             return;
           }
 
           if (!/.+@gla\.ac\.in$/.test(email)) {
+            console.log('Validation failed: invalid email');
             alert('Please use your official @gla.ac.in email.');
             return;
           }
+          
+          console.log('Validation passed');
 
           var tierKey = tierSelect.value;
           var qty = qtyInput.value;
           var total = currentTotal();
+          
+          console.log('Booking details:', { tierKey, qty, total });
 
           // Show confirmation alert
           var confirmMessage = 'Confirm your booking:\n\n' +
@@ -170,8 +185,11 @@
             'Proceed with payment via WhatsApp?';
 
           if (!confirm(confirmMessage)) {
+            console.log('User cancelled confirmation');
             return;
           }
+          
+          console.log('Confirmation accepted, calling API...');
 
           try {
             var response = await fetch('/pay-for-event', {
@@ -190,8 +208,12 @@
                 amount: total
               })
             });
+            
+            console.log('API response status:', response.status);
 
             var data = await response.json();
+            
+            console.log('API response data:', data);
 
             if (!response.ok) {
               alert(data.message || 'Payment request failed.');
@@ -200,7 +222,7 @@
 
             alert('Payment request sent successfully on WhatsApp.');
           } catch (error) {
-            console.error(error);
+            console.error('Error during payment request:', error);
             alert('Something went wrong while sending payment request.');
           }
         });
