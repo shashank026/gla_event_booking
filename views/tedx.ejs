@@ -20,15 +20,21 @@
       </g>
     </svg>
   </div>
+
   <div class="container event-hero-inner">
     <div class="hosted-by-chip">
       <img src="/images/gla-university-logo.jpg" alt="" />
       <span>GLA University presents</span>
     </div>
+
     <p class="eyebrow">Ideas worth spreading</p>
     <h1>TEDx Evening 2026</h1>
-    <p class="lead">A curated evening of short, powerful talks from local thinkers and doers. Stay for the networking
-      reception afterward.</p>
+
+    <p class="lead">
+      A curated evening of short, powerful talks from local thinkers and doers.
+      Stay for the networking reception afterward.
+    </p>
+
     <ul class="event-facts">
       <li><span>Date</span> November 12, 2026</li>
       <li><span>Time</span> 5:00 PM onwards</li>
@@ -48,12 +54,18 @@
     <div class="container">
       <div class="ticket-card">
         <h2>Reserve your seat</h2>
-        <p class="muted">Booking link expires in <span id="countdown" data-expires="${expiresAt}">--:--</span></p>
+
+        <p class="muted">
+          Booking link expires in
+          <span id="countdown" data-expires="${expiresAt}">--:--</span>
+        </p>
+
         <form class="booking-form" onsubmit="return false;">
           <label>
             <span>Full name</span>
             <input type="text" name="name" placeholder="Your name" required />
           </label>
+
           <label>
             <span>Phone number</span>
             <input type="tel" name="phoneNumber" value="${phoneNumber}" readonly />
@@ -61,16 +73,21 @@
 
           <div class="verify-fields">
             <p class="verify-heading">Student verification</p>
+
             <label>
               <span>Student ID / Roll number</span>
               <input type="text" name="rollNumber" placeholder="e.g. 2201100123" required />
             </label>
+
             <label>
               <span>College email ID</span>
               <input type="email" name="collegeEmail" placeholder="yourname@gla.ac.in" pattern=".+@gla\\.ac\\.in$"
                 required />
             </label>
-            <p class="field-hint">Use your official @gla.ac.in email. You'll need your student ID card at entry.</p>
+
+            <p class="field-hint">
+              Use your official @gla.ac.in email. You'll need your student ID card at entry.
+            </p>
           </div>
 
           <label>
@@ -81,6 +98,7 @@
               <option value="patron" data-price="2499">Patron (reserved) &mdash; &#8377;2499</option>
             </select>
           </label>
+
           <label>
             <span>Number of seats</span>
             <input type="number" name="qty" min="1" max="6" value="1" />
@@ -94,7 +112,9 @@
           <button type="button" class="btn whatsapp-btn">
             Pay via UPI
           </button>
-          <p class="wa-note">We'll confirm your seat and take payment over WhatsApp, just like booking a metro ticket.
+
+          <p class="wa-note">
+            We'll confirm your seat and take payment over WhatsApp.
           </p>
         </form>
       </div>
@@ -106,129 +126,13 @@
       <span class="total-label">Total</span>
       <span class="total-amount" id="stickyTotal">&#8377;999</span>
     </div>
+
     <button type="button" class="whatsapp-btn">
       Pay via UPI
     </button>
   </div>
 
-  <script>
-    (function () {
-      console.log('Script loaded and executing...');
-      var NL = String.fromCharCode(10);
-      var priceLabels = { standard: 'Standard', student: 'Student', patron: 'Patron (reserved)' };
-      var form = document.querySelector('.booking-form');
-      var tierSelect = form.querySelector('select[name="tier"]');
-      var qtyInput = form.querySelector('input[name="qty"]');
-      var stickyTotal = document.getElementById('stickyTotal');
-      var inlineTotal = document.getElementById('inlineTotal');
-      
-      console.log('Form elements found:', { form, tierSelect, qtyInput, stickyTotal, inlineTotal });
-
-      function currentTotal() {
-        var opt = tierSelect.options[tierSelect.selectedIndex];
-        var price = parseInt(opt.getAttribute('data-price'), 10) || 0;
-        var qty = parseInt(qtyInput.value, 10) || 1;
-        return price * qty;
-      }
-
-      function updateTotal() {
-        var total = '\u20b9' + currentTotal();
-        stickyTotal.textContent = total;
-        inlineTotal.textContent = total;
-      }
-
-      tierSelect.addEventListener('change', updateTotal);
-      qtyInput.addEventListener('input', updateTotal);
-      updateTotal();
-
-      var waButtons = document.querySelectorAll('.whatsapp-btn');
-      console.log('Found ' + waButtons.length + ' WhatsApp buttons');
-      
-      for (var i = 0; i < waButtons.length; i++) {
-        console.log('Adding click listener to button ' + (i + 1));
-        waButtons[i].addEventListener('click', async function () {
-          console.log('Pay via UPI button clicked');
-          var name = form.querySelector('input[name="name"]').value.trim();
-          var roll = form.querySelector('input[name="rollNumber"]').value.trim();
-          var email = form.querySelector('input[name="collegeEmail"]').value.trim();
-          var phone = form.querySelector('input[name="phoneNumber"]').value.trim();
-          
-          console.log('Form data:', { name, roll, email, phone });
-
-          if (!name || !roll || !email) {
-            console.log('Validation failed: missing required fields');
-            alert('Please fill your name, roll number and college email before payment.');
-            return;
-          }
-
-          if (!/.+@gla\.ac\.in$/.test(email)) {
-            console.log('Validation failed: invalid email');
-            alert('Please use your official @gla.ac.in email.');
-            return;
-          }
-          
-          console.log('Validation passed');
-
-          var tierKey = tierSelect.value;
-          var qty = qtyInput.value;
-          var total = currentTotal();
-          
-          console.log('Booking details:', { tierKey, qty, total });
-
-          // Show confirmation alert
-          var confirmMessage = 'Confirm your booking:\n\n' +
-            'Event: TEDx Evening 2026\n' +
-            'Name: ' + name + '\n' +
-            'Pass Type: ' + priceLabels[tierKey] + '\n' +
-            'Quantity: ' + qty + '\n' +
-            'Total Amount: ₹' + total + '\n\n' +
-            'Proceed with payment via WhatsApp?';
-
-          if (!confirm(confirmMessage)) {
-            console.log('User cancelled confirmation');
-            return;
-          }
-          
-          console.log('Confirmation accepted, calling API...');
-
-          try {
-            var response = await fetch('/pay-for-event', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                destination: phone,
-                event: 'TEDX 2026',
-                name: name,
-                rollNumber: roll,
-                collegeEmail: email,
-                ticketType: priceLabels[tierKey],
-                quantity: qty,
-                amount: total
-              })
-            });
-            
-            console.log('API response status:', response.status);
-
-            var data = await response.json();
-            
-            console.log('API response data:', data);
-
-            if (!response.ok) {
-              alert(data.message || 'Payment request failed.');
-              return;
-            }
-
-            alert('Payment request sent successfully on WhatsApp.');
-          } catch (error) {
-            console.error('Error during payment request:', error);
-            alert('Something went wrong while sending payment request.');
-          }
-        });
-      }
-    })();
-  </script>
+  <script src="/js/tedx.js"></script>
+  <script src="/js/countdown.js"></script>
   `
   }) %>
-  <script src="/js/countdown.js"></script>
