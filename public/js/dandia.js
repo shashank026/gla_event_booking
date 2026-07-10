@@ -60,12 +60,12 @@ document.addEventListener('DOMContentLoaded', function () {
             var phone = form.querySelector('input[name="phoneNumber"]').value.trim();
 
             if (!name || !roll || !email) {
-                alert('Please fill your name, roll number and college email before payment.');
+                await customAlert('Please fill your name, roll number and college email before payment.', 'Missing details');
                 return;
             }
 
             if (!/.+@gla\.ac\.in$/.test(email)) {
-                alert('Please use your official @gla.ac.in email.');
+                await customAlert('Please use your official @gla.ac.in email.', 'Invalid email');
                 return;
             }
 
@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 'Total Amount: ₹' + total + '\n\n' +
                 'Proceed with payment via WhatsApp?';
 
-            if (!confirm(confirmMessage)) {
+            if (!await customConfirm(confirmMessage)) {
                 return;
             }
 
@@ -107,16 +107,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 var data = await response.json();
 
                 if (!response.ok) {
-                    alert(data.message || 'Payment request failed.');
+                    await customAlert(data.message || 'Payment request failed.', 'Payment failed');
                     return;
                 }
 
+                await customAlert('Payment request sent successfully on WhatsApp.', 'Request sent');
                 window.close();
-
-                alert('Payment request sent successfully on WhatsApp.');
             } catch (error) {
                 console.error('Payment request error:', error);
-                alert('Something went wrong while sending payment request.');
+                await customAlert('Something went wrong while sending payment request.', 'Payment failed');
             }
         });
     });

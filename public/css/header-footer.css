@@ -269,3 +269,38 @@
 @media (min-width: 721px) {
   .sticky-book-bar { display: none; }
 }
+
+/* In-page dialog, used instead of native alerts in embedded browsers. */
+.custom-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.58);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.custom-dialog-overlay.is-visible { opacity: 1; }
+
+.custom-dialog {
+  width: min(100%, 420px);
+  padding: 24px;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.24);
+  transform: translateY(8px) scale(0.98);
+  transition: transform 0.15s ease;
+}
+
+.custom-dialog-overlay.is-visible .custom-dialog { transform: none; }
+.custom-dialog-title { margin: 0 0 10px; font-size: 1.25rem; }
+.custom-dialog-message { margin: 0; color: #475569; line-height: 1.55; white-space: pre-line; }
+.custom-dialog-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
+.custom-dialog-button { border: 0; border-radius: 999px; padding: 11px 20px; font: 600 0.92rem "Inter", sans-serif; cursor: pointer; }
+.custom-dialog-cancel { background: #e2e8f0; color: #334155; }
+.custom-dialog-confirm { background: #25d366; color: #fff; }
+.custom-dialog-button:focus-visible { outline: 3px solid rgba(37, 211, 102, 0.3); outline-offset: 2px; }
